@@ -1,6 +1,7 @@
 'use strict';
 
 var parseUrl = require('url').parse;
+console.log('woot');
 
 var DEFAULT_PORTS = {
   ftp: 21,
@@ -22,11 +23,15 @@ var stringEndsWith = String.prototype.endsWith || function(s) {
  *  given URL. If no proxy is set, this will be an empty string.
  */
 function getProxyForUrl(url) {
+	console.log("getProxyForUrl " + JSON.stringify(url,0,4) );
   var parsedUrl = typeof url === 'string' ? parseUrl(url) : url || {};
   var proto = parsedUrl.protocol;
   var hostname = parsedUrl.host;
   var port = parsedUrl.port;
   if (typeof hostname !== 'string' || !hostname || typeof proto !== 'string') {
+	console.log('no sir - i dont like it ' + hostname);
+	console.log('typeof hostname ' + (typeof hostname));
+        console.log('typeof proto ' + (typeof proto));
     return '';  // Don't proxy URLs without a valid scheme or host.
   }
 
@@ -36,6 +41,7 @@ function getProxyForUrl(url) {
   hostname = hostname.replace(/:\d*$/, '');
   port = parseInt(port) || DEFAULT_PORTS[proto] || 0;
   if (!shouldProxy(hostname, port)) {
+	console.log("shouldProxy false for " + url.host);
     return '';  // Don't proxy URLs that match NO_PROXY.
   }
 
@@ -44,6 +50,8 @@ function getProxyForUrl(url) {
     // Missing scheme in proxy, default to the requested URL's scheme.
     proxy = proto + '://' + proxy;
   }
+
+  console.log("proxy is " + proxy);
   return proxy;
 }
 
@@ -56,6 +64,7 @@ function getProxyForUrl(url) {
  * @private
  */
 function shouldProxy(hostname, port) {
+	console.log("shouldProxy ? " + hostname );
   var NO_PROXY = getEnv('no_proxy').toLowerCase();
   console.log("proxy-from-env.no_proxy is " + NO_PROXY);
 
