@@ -57,6 +57,8 @@ function getProxyForUrl(url) {
  */
 function shouldProxy(hostname, port) {
   var NO_PROXY = getEnv('no_proxy').toLowerCase();
+  console.log("proxy-from-env.no_proxy is " + NO_PROXY);
+
   if (!NO_PROXY) {
     return true;  // Always proxy if NO_PROXY is not set.
   }
